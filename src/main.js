@@ -22,13 +22,12 @@ const app =  createApp(App)
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAulGVzjguayfqgpj-4keyneP_UMIzpagc",
-    authDomain: "cbt-training-3ff44.firebaseapp.com",
-    projectId: "cbt-training-3ff44",
-    storageBucket: "cbt-training-3ff44.firebasestorage.app",
-    messagingSenderId: "183381617575",
-    appId: "1:183381617575:web:eba4556ff7ad0b4893a482",
-    measurementId: "G-ZQ3SN8Q7YH"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
   };
 
 
