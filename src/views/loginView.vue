@@ -103,7 +103,7 @@ const handleAuthError = (error) => {
         :model="loginAuth"
         :rules="rules"
         @submit.prevent="login"
-        class="bg-transparent backdrop-blur-xl p-12 w-[60%] md:w-[33.33vw] rounded-xl"
+        class="bg-transparent backdrop-blur-xl p-12 w-[90%] md:w-[33.33vw] rounded-xl"
       >
         <!---------------------- Logo ------------------->
         <div class="pb-5 text-center flex flex-col justify-center items-center">
