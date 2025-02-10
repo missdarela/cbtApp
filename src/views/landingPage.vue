@@ -140,7 +140,7 @@ const signup = async () => {
           :model="authData"
           :rules="rules"
           @submit.prevent="signup(ruleFormRef)"
-          class="bg-white md:p-10 p-0 h-full md:h-[85vh] md:rounded-r-xl rounded md:rounded-none"
+          class="bg-white p-10  h-full md:h-[85vh] md:rounded-r-xl rounded md:rounded-none"
         >
           <h2 class="text-3xl text-[#038F74] text-center font-bold pb-4">
             Register
