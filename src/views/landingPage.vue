@@ -112,7 +112,7 @@ const signup = async () => {
 </script>
 
 <template>
-  <main class="bg-[#038F74] h-screen px-10 md:py-4 py-0">
+  <main class="bg-[#038F74] h-screen px-10 md:py-4 py-2">
     <section class="flex flex-row items-center justify-center md:h-[95vh]">
       <!-------------left flex---------------------------->
       <section class="w-1/2 rounded-l-xl hidden md:flex img-section">
