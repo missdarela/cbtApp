@@ -116,7 +116,8 @@ const handleAuthError = (error) => {
         </div>
 
         <!---------------------- Email ------------------->
-        <el-form-item label-position="top" prop="email">
+        <el-form-item label-position="top" prop="email" 
+        class="">
           <el-input
             type="email"
             placeholder="Email Address"
