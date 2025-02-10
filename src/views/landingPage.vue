@@ -134,7 +134,7 @@ const signup = async () => {
         <!-- <img src="../assets/images/image2.png" alt="bg" width="400px"> -->
       </section>
       <!----------------------------------form -------------------------------->
-      <section class="flex md:flex-col flex-row justify-center items-center">
+      <section class="">
         <el-form
           ref="ruleFormRef"
           :model="authData"
