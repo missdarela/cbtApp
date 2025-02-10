@@ -112,7 +112,7 @@ const signup = async () => {
 </script>
 
 <template>
-  <main class="bg-[#038F74] h-screen px-10 md:py-4 py-2">
+  <main class="bg-[#038F74] h-screen px-10 py-4">
     <section class="flex flex-row items-center justify-center md:h-[95vh]">
       <!-------------left flex---------------------------->
       <section class="w-1/2 rounded-l-xl hidden md:flex img-section">
@@ -140,7 +140,7 @@ const signup = async () => {
           :model="authData"
           :rules="rules"
           @submit.prevent="signup(ruleFormRef)"
-          class="bg-white p-10  h-full md:h-[85vh] md:rounded-r-xl rounded md:rounded-none"
+          class="bg-white md:p-10 p-0 h-full md:h-[85vh] md:rounded-r-xl rounded md:rounded-none"
         >
           <h2 class="text-3xl text-[#038F74] text-center font-bold pb-4">
             Register
