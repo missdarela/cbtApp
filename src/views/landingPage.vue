@@ -93,7 +93,7 @@ const signup = async () => {
           showClose: true,
           duration: 3000,
         });
-        router.push("./dashboard.vue");
+        router.push("/dashboard");
       } catch (error) {
         console.error("Signup error:", error.message);
         //  Show an error message
