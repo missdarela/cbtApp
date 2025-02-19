@@ -1,11 +1,17 @@
 <script setup>
 import { ref, reactive, nextTick } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
 // router
 const router = useRouter();
+
+// store
+const authStore = useAuthStore();
+const db = getFirestore();
 
 // auth
 const authData = reactive({
@@ -87,6 +93,21 @@ const signup = async () => {
         );
         console.log("User created:", userCredential.user);
         // Show a success message with Element Plus
+
+          // Save user data in Firestore
+          const userData = {
+          uid: user.uid,
+          fname: authData.fname,
+          lname: authData.lname,
+          email: authData.email,
+          phoneNumber: authData.phoneNumber,
+          createdAt: new Date(),
+        };
+        await setDoc(doc(db, "users", user.uid), userData);
+
+        // Update Pinia store
+        authStore.user = userData;
+        
         ElMessage({
           message: "Signup successful!",
           type: "success",

@@ -1,20 +1,16 @@
 import { createApp } from 'vue'
 import './style.css'
 import router from "./router"
+import { createPinia } from 'pinia'
 import App from './App.vue'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// import { getAuth } from "firebase/auth";
-// import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+const pinia = createPinia()
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { initializeApp } from "firebase/app";
+
 
 
 
@@ -39,4 +35,5 @@ initializeApp(firebaseConfig);
 
 app.use(router)
 app.use(ElementPlus)
+app.use(pinia)
 app.use(App).mount('#app')
