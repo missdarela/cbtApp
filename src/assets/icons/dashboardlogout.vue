@@ -2,8 +2,8 @@
     <svg
       viewBox="0 -0.5 25 25"
       fill="none"
-      width="20"
-      height="20"
+      width="25"
+      height="25"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

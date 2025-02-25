@@ -18,9 +18,17 @@ routes:[
   {
     path:"/dashboard",
     name: "dashboardView",
-    component: () => import('../views/dashboardView.vue')
+    component: () => import('../views/dashboardView.vue'),
+    children: [
+      {
+        path: "",
+        name: "dashboardLayouts",
+        component:()=> import("../layouts/dashboardIndex.vue")
+      }
+    ]
 
-}
+},
+
 ]
 })
 

@@ -4,22 +4,21 @@ import ProfileIcon from "../assets/icons/dashboardProfileIcon.vue";
 import Exams from "../assets/icons/dashboardExams.vue";
 import Results from "../assets/icons/dashboardResult.vue";
 import DashboardHeader from "../components/dashboardHeader.vue";
+import DashboardIndex from "../layouts/dashboardIndex.vue";
 
 
 </script>
 <template>
   <main>
     <section class="">
-      <!-- <div v-if="authStore.loading">
-        <p class="text-green-600">Loading user data...</p>
-      </div> -->
+   
       <div  class="common-layout">
         <el-container>
           <el-aside
-            width="280px"
+            width="250px"
 
           
-            class="bg-[#038F74] text-white h-[100vh] px-10 py-10"
+            class="bg-[#038F74] text-white px-5 py-10"
           >
 
             <section class="flex flex-col justify-between items-baseline">
@@ -41,7 +40,7 @@ import DashboardHeader from "../components/dashboardHeader.vue";
                   class="dashboard md:flex gap-4 justify-between items-center"
                 >
                   <DashboardIcon class="" />
-                  <h3>Dashboard</h3>
+                  <router-link to=""><h3>Dashboard</h3></router-link>
                 </div>
 
                 <div class="profile md:flex gap-4 justify-between items-center">
@@ -65,10 +64,12 @@ import DashboardHeader from "../components/dashboardHeader.vue";
           </el-aside>
 
           <el-container>
-            <el-header width="100%" class="!w-full">
+            <el-header class="bg-[#f2f4fa] border-b-2 border-[#038f74]">
               <DashboardHeader />
             </el-header>
-            <el-main>Main</el-main>
+            <el-main class=" bg-[#e6e2fb]">
+              <DashboardIndex />
+            </el-main>
           </el-container>
         </el-container>
       </div>

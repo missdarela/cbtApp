@@ -1,19 +1,15 @@
 <script setup>
-import { ref, reactive, nextTick } from "vue";
+import { ref, reactive} from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "../stores/authStore";
 
-// router
-const router = useRouter();
-
-// store
 const authStore = useAuthStore();
-const db = getFirestore();
+const router = useRouter();
+const auth = getAuth();
 
-// auth
+
 const authData = reactive({
   fname: "",
   lname: "",
@@ -25,7 +21,7 @@ const authData = reactive({
 
 const ruleFormRef = ref(null);
 
-// Validation rules
+// Validation rules (as defined earlier)
 const rules = {
   fname: [
     { required: true, message: "Please enter your Firstname", trigger: "blur" },
@@ -73,9 +69,7 @@ const rules = {
   ],
 };
 
-// Signup function using Firebase Authentication
 const signup = async () => {
-  await nextTick(); // Ensure form ref is available
 
   if (!ruleFormRef.value) {
     console.error("Form ref not available");
@@ -85,17 +79,15 @@ const signup = async () => {
   ruleFormRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const auth = getAuth();
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           authData.email,
           authData.password
         );
-        console.log("User created:", userCredential.user);
-        // Show a success message with Element Plus
+        const user = userCredential.user;
 
-          // Save user data in Firestore
-          const userData = {
+        // Prepare extra user data
+        const userData = {
           uid: user.uid,
           fname: authData.fname,
           lname: authData.lname,
@@ -103,139 +95,90 @@ const signup = async () => {
           phoneNumber: authData.phoneNumber,
           createdAt: new Date(),
         };
-        await setDoc(doc(db, "users", user.uid), userData);
 
-        // Update Pinia store
-        authStore.user = userData;
-        
-        ElMessage({
-          message: "Signup successful!",
-          type: "success",
-          showClose: true,
-          duration: 3000,
-        });
+        // Save user data in Firestore and update Pinia state
+        await authStore.saveUserData(user.uid, userData);
+
+        ElMessage.success("Signup successful!");
         router.push("/dashboard");
       } catch (error) {
         console.error("Signup error:", error.message);
-        //  Show an error message
-        ElMessage({
-          message: error.message,
-          type: "error",
-          showClose: true,
-          duration: 5000,
-        });
+        ElMessage.error(error.message);
       }
     } else {
       console.log("Validation failed.");
     }
   });
 };
+
+
 </script>
 
 <template>
+  <!-- Your sign-up form template goes here -->
   <main class="bg-[#038F74] h-screen px-10 py-4">
-    <section class="flex md:flex-row items-center justify-center h-screen md:h-[95vh]">
-      <!-------------left flex---------------------------->
+    <section class="flex flex-col md:flex-row items-center justify-center h-screen md:h-[95vh]">
+      <!-- Left Section for Image (Desktop) -->
       <section class="w-1/2 rounded-l-xl hidden md:flex img-section">
-        <div class="bg-black/60 !text-white px-8 py-3 w-full h-full">
-          <img
-            src="../assets/images/Skillboost-Africa-Logo.png"
-            width="100px"
-            alt="SkillBoost"
-          />
-          <h1 class="text-[40px] pt-32 leading-tight subpixel-antialiased">
-            SkillBoost Africa CBT <br />
-            Examination
+        <div class="bg-black/60 text-white px-8 py-3 w-full h-full">
+          <img src="../assets/images/Skillboost-Africa-Logo.png" width="100px" alt="SkillBoost" />
+          <h1 class="text-[40px] pt-32 leading-tight">
+            SkillBoost Africa CBT <br /> Examination
           </h1>
           <p class="text-[16px] pt-2">
-            Get started today and take your exams <br />
-            with confidence!
+            Get started today and take your exams <br /> with confidence!
           </p>
         </div>
-        <!-- <img src="../assets/images/image2.png" alt="bg" width="400px"> -->
       </section>
-      <!----------------------------------form -------------------------------->
-      <section class="">
+
+      <!-- Sign-Up Form Section -->
+      <section class="w-full md:w-1/2">
         <el-form
           ref="ruleFormRef"
           :model="authData"
           :rules="rules"
-          @submit.prevent="signup(ruleFormRef)"
+          @submit.prevent="signup"
           class="bg-white p-10 h-full md:h-[85vh] md:rounded-r-xl rounded md:rounded-none"
         >
-          <h2 class="text-3xl text-[#038F74] text-center font-bold pb-4">
-            Register
-          </h2>
-          <!-------------------------------name-------------------------------->
+          <h2 class="text-3xl text-[#038F74] text-center font-bold pb-4">Register</h2>
+
+          <!-- First and Last Name -->
           <el-form-item label-position="top" prop="fname">
             <el-row :gutter="10">
               <el-col :span="12">
-                <el-input
-                  type="text"
-                  placeholder="First Name"
-                  v-model="authData.fname"
-                  size="large"
-                  class=""
-                />
+                <el-input type="text" placeholder="First Name" v-model="authData.fname" size="large" />
               </el-col>
-              <!--------------lname col ------------------------>
-
               <el-col :span="12">
-                <el-input
-                  type="text"
-                  placeholder="Last Name"
-                  v-model="authData.lname"
-                  size="large"
-                />
+                <el-input type="text" placeholder="Last Name" v-model="authData.lname" size="large" />
               </el-col>
             </el-row>
           </el-form-item>
 
-          <!-----------email------------->
+          <!-- Email -->
           <el-form-item label-position="top" prop="email">
-            <el-input
-              type="email"
-              placeholder="Email Address"
-              v-model="authData.email"
-              size="large"
-            />
+            <el-input type="email" placeholder="Email Address" v-model="authData.email" size="large" />
           </el-form-item>
-          <!-----------phone number------------->
+
+          <!-- Phone Number -->
           <el-form-item label-position="top" prop="phoneNumber">
-            <el-input
-              type="number"
-              placeholder="Phone Number"
-              v-model="authData.phoneNumber"
-              size="large"
-            />
+            <el-input type="number" placeholder="Phone Number" v-model="authData.phoneNumber" size="large" />
           </el-form-item>
-          <!-----------New Password------------->
+
+          <!-- Password -->
           <el-form-item label-position="top" prop="password">
-            <el-input
-              type="password"
-              placeholder="New Password"
-              v-model="authData.password"
-              size="large"
-              show-password
-            />
+            <el-input type="password" placeholder="New Password" v-model="authData.password" size="large" show-password />
           </el-form-item>
 
-          <!-----------Confirm Password------------->
+          <!-- Confirm Password -->
           <el-form-item label-position="top" prop="confirmPassword">
-            <el-input
-              type="password"
-              placeholder="Confirm Password"
-              v-model="authData.confirmPassword"
-              size="large"
-              show-password
-            />
+            <el-input type="password" placeholder="Confirm Password" v-model="authData.confirmPassword" size="large" show-password />
           </el-form-item>
 
-          <!---------------sign up btn ------------->
+          <!-- Sign Up Button -->
           <div class="mt-3">
             <el-button
-              @click="signup(ruleFormRef)"
-              mode="submit"
+              @click="signup"
+              type="primary"
               class="!bg-[#038F74] text-2xl !text-white w-full mt-5 hover"
               size="large"
             >
@@ -243,12 +186,10 @@ const signup = async () => {
             </el-button>
           </div>
 
+          <!-- Login Link -->
           <div class="text-center pt-2 text-sm">
-            Already existing account?
-            <router-link
-              to="/login"
-              class="!text-blue-700 text-center px-1 hover:underline"
-            >
+            Already have an account?
+            <router-link to="/login" class="!text-blue-700 hover:underline">
               Login
             </router-link>
           </div>
