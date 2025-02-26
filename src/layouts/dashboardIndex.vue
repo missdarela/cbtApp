@@ -1,8 +1,8 @@
 <script setup></script>
 <template>
-    <main class="w-[75vw]">
+    <main class="">
         <section class="px-10">
-            <h2 class="text-blue-900 font-bold text-xl py-2">Dashboard</h2>
+            <h2 class="text-blue-900 font-bold text-xl ">Dashboard</h2>
             
             <section class="flex gap-5">
 
