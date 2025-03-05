@@ -4,10 +4,18 @@ import Logout from "../assets/icons/dashboardlogout.vue";
 import {ref,computed} from "vue"
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
+import { onMounted } from "vue";
+
 
 const router = useRouter();
 const authStore = useAuthStore();
 
+
+onMounted(() => {
+  if (!authStore.user) {
+    authStore.fetchUser();
+  }
+});
 
 const firstLetter = computed(() => {
   // Check if authStore.user exists and has the fname property
@@ -15,6 +23,12 @@ const firstLetter = computed(() => {
     return authStore.user.fname[0].toUpperCase();
   }
   return ""; 
+});
+const capitalizedFirstName = computed(() => {
+  if (authStore.user && authStore.user.fname) {
+    return authStore.user.fname.charAt(0).toUpperCase() + authStore.user.fname.slice(1);
+  }
+  return "";
 });
 
 // Logout function that calls the store's logout action and navigates to login
@@ -25,17 +39,16 @@ const logout = async () => {
 </script>
 
 <template>
-  <main class="">
+  <main class="font-mont font-light">
     <section class=" px-16 py-3">
       <figure class="flex justify-end items-center gap-2">
-        <el-avatar size="medium" class="!text-xl !font-bold">{{ truncate }}</el-avatar>
+        <el-avatar size="medium" class="!text-xl !font-bold">{{ firstLetter }}</el-avatar>
         <figcaption>
           <el-dropdown>
             <!-- Check if the user object exists -->
             <el-text v-if="authStore.user">
-              {{ authStore.user.fname }}
+              {{ capitalizedFirstName }}
               <el-icon class="el-icon--right">
-                <ArrowDown />
               </el-icon>
             </el-text>
             <el-text v-else>
@@ -54,7 +67,6 @@ const logout = async () => {
         </figcaption>
       </figure>
     </section>
-    <hr class="bg-[#038F74] p-[1px]" />
   </main>
 </template>
 

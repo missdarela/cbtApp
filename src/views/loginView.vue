@@ -3,42 +3,35 @@ import { ref, reactive } from "vue";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStore";
 
-// Initialize Firebase authentication
 const auth = getAuth();
 const router = useRouter();
+const authStore = useAuthStore();
 
 const loginAuth = reactive({
   email: "",
   password: "",
 });
 
-// Form reference
 const loginRef = ref(null);
 
-// Validation rules
 const rules = {
   email: [
     { required: true, message: "Email field cannot be empty", trigger: "blur" },
     { type: "email", message: "Invalid email format", trigger: "blur" },
   ],
   password: [
-    {
-      required: true,
-      message: "Password field cannot be empty",
-      trigger: "blur",
-    },
+    { required: true, message: "Password field cannot be empty", trigger: "blur" },
   ],
 };
 
-// Handle login
 const login = async () => {
   if (!navigator.onLine) {
     ElMessage.error("No internet connection. Please check your network.");
     return;
   }
 
-  // Validate form
   if (!loginRef.value) {
     console.error("Form reference is not available.");
     return;
@@ -47,15 +40,18 @@ const login = async () => {
   loginRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        // Proceed to login directly
         const userCredential = await signInWithEmailAndPassword(
           auth,
           loginAuth.email,
           loginAuth.password
         );
 
-        console.log("User logged in:", userCredential.user);
+        console.log("User signed in:", userCredential.user);
         ElMessage.success("Login successful!");
+
+        // Explicitly call fetchUser to update the store
+        await authStore.fetchUser();
+
         router.push("/dashboard");
       } catch (error) {
         if (error.code === "auth/invalid-credential") {
@@ -68,7 +64,6 @@ const login = async () => {
   });
 };
 
-// Handle Firebase authentication errors
 const handleAuthError = (error) => {
   console.error("Login error:", error.code || "Unknown error", error);
 
@@ -93,6 +88,7 @@ const handleAuthError = (error) => {
   }
 };
 </script>
+
 
 
 <template>

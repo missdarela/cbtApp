@@ -1,26 +1,33 @@
 <script setup>
+import { ref, reactive } from "vue";
+
+import { onMounted } from "vue";
 import DashboardIcon from "../assets/icons/dashboardIcon.vue";
 import ProfileIcon from "../assets/icons/dashboardProfileIcon.vue";
 import Exams from "../assets/icons/dashboardExams.vue";
 import Results from "../assets/icons/dashboardResult.vue";
 import DashboardHeader from "../components/dashboardHeader.vue";
-import DashboardIndex from "../layouts/dashboardIndex.vue";
+import { useAuthStore } from "../stores/authStore";
+import { useRouter } from "vue-router";
+
+
+const authStore = useAuthStore();
+const router = useRouter
+
+onMounted(() => {
+  if (!authStore.user) {
+    authStore.fetchUser();
+  }
+});
 
 
 </script>
 <template>
   <main>
-    <section class="">
-   
-      <div  class="common-layout">
-        <el-container>
-          <el-aside
-            width="250px"
-
-          
-            class="bg-[#038F74] text-white px-5 py-10"
-          >
-
+    <section class="font-mont font-normal">
+      <div class="common-layout">
+        <el-container class="h-screen">
+          <el-aside width="250px" class="bg-[#187c68] text-white px-5 py-10">
             <section class="flex flex-col justify-between items-baseline">
               <figure>
                 <img
@@ -30,45 +37,48 @@ import DashboardIndex from "../layouts/dashboardIndex.vue";
                   class="mx-auto"
                 />
                 <figcaption>
-                  <small>SkillBoost Africa CBT Examination</small>
+                  <small class="text-xs">SkillBoost Africa CBT Examination</small>
                 </figcaption>
               </figure>
               <section
-                class="flex flex-col gap-10 justify-around items-baseline py-14 px-5"
+                class="flex flex-col gap-10 justify-around items-baseline py-14 px-5 font-bold"
               >
-                <div
+                <router-link to="/dashboard"
                   class="dashboard md:flex gap-4 justify-between items-center"
                 >
                   <DashboardIcon class="" />
-                  <router-link to=""><h3>Dashboard</h3></router-link>
-                </div>
+                  <h3 class="">Dashboard</h3>
+                </router-link>
 
-                <div class="profile md:flex gap-4 justify-between items-center">
+                <router-link to="/dashboard/profile"
+                  class="profile md:flex gap-4 justify-between items-center">
                   <ProfileIcon class="" />
                   <h3>Profile</h3>
-                </div>
+                </router-link>
 
-                <div
+                <router-link to="/dashboard/take-exam"
                   class="registration md:flex gap-4 justify-evenly items-center"
                 >
                   <Exams class="" />
                   <h3>Take Exam</h3>
-                </div>
+                </router-link>
 
-                <div class="md:flex gap-4 justify-evenly items-center">
+                <router-link to="/dashboard/results"
+                class="md:flex gap-4 justify-evenly items-center">
                   <Results class="" />
                   <h3>Results</h3>
-                </div>
+                </router-link>
               </section>
             </section>
           </el-aside>
 
           <el-container>
-            <el-header class="bg-[#f2f4fa] border-b-2 border-[#038f74]">
+            <el-header class="bg-[#f2f4fa]">
               <DashboardHeader />
             </el-header>
-            <el-main class=" bg-[#e6e2fb]">
-              <DashboardIndex />
+            <el-main>
+              <!-- <component :is="tabComponents[activeTab]"/> -->
+                <router-view />
             </el-main>
           </el-container>
         </el-container>

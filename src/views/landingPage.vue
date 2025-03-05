@@ -100,7 +100,7 @@ const signup = async () => {
         await authStore.saveUserData(user.uid, userData);
 
         ElMessage.success("Signup successful!");
-        router.push("/dashboard");
+        router.push("/login");
       } catch (error) {
         console.error("Signup error:", error.message);
         ElMessage.error(error.message);
@@ -117,7 +117,7 @@ const signup = async () => {
 <template>
   <!-- Your sign-up form template goes here -->
   <main class="bg-[#038F74] h-screen px-10 py-4">
-    <section class="flex flex-col md:flex-row items-center justify-center h-screen md:h-[95vh]">
+    <section class="flex flex-col md:flex-row items-center justify-center mx-auto md:w-[80%] w-[95%] h-auto md:h-[95vh]">
       <!-- Left Section for Image (Desktop) -->
       <section class="w-1/2 rounded-l-xl hidden md:flex img-section">
         <div class="bg-black/60 text-white px-8 py-3 w-full h-full">
