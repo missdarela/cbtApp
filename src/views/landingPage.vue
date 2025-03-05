@@ -127,6 +127,7 @@ const signup = async () => {
           </h1>
           <p class="text-[16px] pt-2">
             Get started today and take your exams <br /> with confidence!
+            <span>some text</span>
           </p>
         </div>
       </section>
